@@ -144,7 +144,7 @@ __ALIGN_BEGIN uint8_t USBD_MIDI_CfgFSDesc[] __ALIGN_END =
 
 uint8_t USBD_MIDI_RegisterInterface(USBD_HandleTypeDef *pdev, USBD_MIDI_ItfTypeDef *fops)
 {
-	_handle = pdev;
+
 	uint8_t ret = USBD_FAIL;
 
 	if(fops != NULL)
@@ -158,6 +158,7 @@ uint8_t USBD_MIDI_RegisterInterface(USBD_HandleTypeDef *pdev, USBD_MIDI_ItfTypeD
 
 static uint8_t USBD_MIDI_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
 {
+	_handle = pdev;
 	USBD_LL_OpenEP(pdev, MIDI_IN_EP, USBD_EP_TYPE_BULK, MIDI_DATA_FS_MAX_PACKET_SIZE);
 	USBD_LL_OpenEP(pdev, MIDI_OUT_EP, USBD_EP_TYPE_BULK, MIDI_DATA_FS_MAX_PACKET_SIZE);
 	USBD_LL_PrepareReceive(pdev, MIDI_OUT_EP, (uint8_t*)USB_RX_BUFF, MIDI_DATA_FS_MAX_PACKET_SIZE);
@@ -196,6 +197,11 @@ static uint8_t *USBD_MIDI_GetFSCfgDesc(uint16_t *length)
 
 uint8_t MIDI_TransmitData(uint8_t* buff, uint8_t length)
 {
+	if(_handle == NULL)
+	{
+		return;
+	}
+
 	int i = 0;
 	for(i = 0; i < length; i++)
 	{

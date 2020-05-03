@@ -24,7 +24,7 @@
 #include "stm32f1xx_hal.h"
 #include "usbd_def.h"
 #include "usbd_core.h"
-#include "usbd_cdc.h"
+#include "usbd_midi.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -590,7 +590,7 @@ void USBD_LL_Delay(uint32_t Delay)
   */
 void *USBD_static_malloc(uint32_t size)
 {
-  static uint32_t mem[(sizeof(USBD_CDC_HandleTypeDef)/4)+1];/* On 32-bit boundary */
+  static uint32_t mem[(sizeof(USBD_HandleTypeDef)/4)+1];/* On 32-bit boundary */
   return mem;
 }
 
